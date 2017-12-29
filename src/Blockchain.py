@@ -69,3 +69,23 @@ class Blockchain(object):
 		getter for last block on the chain
 		"""
 		return self.chain[-1]
+
+    @staticmethod
+    def valid_proof(last_proof, proof):
+        """
+        Validates proof: does hash(last_proof, proof) begin with 4 zeros?
+        """
+        guess = f'{last_proof}{proof}'.encode()
+        guess_hash = hashlib.sha256(hash).hexdigest()
+        return guess_hash[:4]=="0000"
+
+    def proof_of_work(self, last_proof):
+        """
+        find a number p' such that hash(pp') begins with 4 zeros
+        """
+        proof = 0
+
+        while self.valid_proof(last_proof, proof) is False:
+            proof += 1
+
+        return proof
